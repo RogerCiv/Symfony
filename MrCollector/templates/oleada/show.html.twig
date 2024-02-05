@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Oleada{% endblock %}
+
+{% block body %}
+    <h1>Oleada</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ oleada.id }}</td>
+            </tr>
+            <tr>
+                <th>Num_oleada</th>
+                <td>{{ oleada.numOleada }}</td>
+            </tr>
+            <tr>
+                <th>Año_lanzamiento</th>
+                <td>{{ oleada.añoLanzamiento ? oleada.añoLanzamiento|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_oleada_index') }}">back to list</a>
+
+    <a href="{{ path('app_oleada_edit', {'id': oleada.id}) }}">edit</a>
+
+    {{ include('oleada/_delete_form.html.twig') }}
+{% endblock %}

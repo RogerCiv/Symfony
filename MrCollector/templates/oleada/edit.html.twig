@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Oleada{% endblock %}
+
+{% block body %}
+    <h1>Edit Oleada</h1>
+
+    {{ include('oleada/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_oleada_index') }}">back to list</a>
+
+    {{ include('oleada/_delete_form.html.twig') }}
+{% endblock %}

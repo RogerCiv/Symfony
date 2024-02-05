@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Oleada index{% endblock %}
+
+{% block body %}
+    <h1>Oleada index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Num_oleada</th>
+                <th>Año_lanzamiento</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for oleada in oleadas %}
+            <tr>
+                <td>{{ oleada.id }}</td>
+                <td>{{ oleada.numOleada }}</td>
+                <td>{{ oleada.yearLanzamiento ? oleada.yearLanzamiento|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_oleada_show', {'id': oleada.id}) }}">show</a>
+                    <a href="{{ path('app_oleada_edit', {'id': oleada.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_oleada_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Coleccion{% endblock %}
+
+{% block body %}
+    <h1>Create new Coleccion</h1>
+
+    {{ include('coleccion/_form.html.twig') }}
+
+    <a href="{{ path('app_coleccion_index') }}">back to list</a>
+{% endblock %}

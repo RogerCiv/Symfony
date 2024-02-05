@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Coleccion{% endblock %}
+
+{% block body %}
+    <h1>Coleccion</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ coleccion.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ coleccion.nombre }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_coleccion_index') }}">back to list</a>
+
+    <a href="{{ path('app_coleccion_edit', {'id': coleccion.id}) }}">edit</a>
+
+    {{ include('coleccion/_delete_form.html.twig') }}
+{% endblock %}

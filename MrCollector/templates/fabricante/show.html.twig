@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fabricante{% endblock %}
+
+{% block body %}
+    <h1>Fabricante</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ fabricante.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ fabricante.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Logo</th>
+                <td>{{ fabricante.logo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_fabricante_index') }}">back to list</a>
+
+    <a href="{{ path('app_fabricante_edit', {'id': fabricante.id}) }}">edit</a>
+
+    {{ include('fabricante/_delete_form.html.twig') }}
+{% endblock %}
