@@ -23,8 +23,8 @@ class Coleccion
     #[ORM\OneToMany(targetEntity: Objetos::class, mappedBy: 'nombre_coleccion')]
     private Collection $objetos;
 
-    #[ORM\ManyToOne(inversedBy: 'coleccion')]
-    private ?User $user = null;
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'collection')]
+    private Collection $users;
 
 
 
@@ -33,6 +33,7 @@ class Coleccion
     public function __construct()
     {
         $this->objetos = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,18 +83,32 @@ class Coleccion
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
     {
-        return $this->user;
+        return $this->users;
     }
 
-    public function setUser(?User $user): static
+    public function addUser(User $user): static
     {
-        $this->user = $user;
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addCollection($this);
+        }
 
         return $this;
     }
 
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeCollection($this);
+        }
+
+        return $this;
+    }
 
 
    

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Coleccion;
-use App\Form\ColeccionType;
+use App\Form\Coleccion1Type;
 use App\Repository\ColeccionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +26,7 @@ class ColeccionController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $coleccion = new Coleccion();
-        $form = $this->createForm(ColeccionType::class, $coleccion);
+        $form = $this->createForm(Coleccion1Type::class, $coleccion);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +53,7 @@ class ColeccionController extends AbstractController
     #[Route('/{id}/edit', name: 'app_coleccion_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Coleccion $coleccion, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ColeccionType::class, $coleccion);
+        $form = $this->createForm(Coleccion1Type::class, $coleccion);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

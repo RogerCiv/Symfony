@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-// #[ApiResource]
+ #[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -31,12 +31,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToMany(targetEntity: Coleccion::class, mappedBy: 'user')]
-    private Collection $coleccion;
+    #[ORM\ManyToMany(targetEntity: Coleccion::class, inversedBy: 'users')]
+    private Collection $collection;
+
 
     public function __construct()
     {
-        $this->coleccion = new ArrayCollection();
+        $this->collection = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,30 +113,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Coleccion>
      */
-    public function getColeccion(): Collection
+    public function getCollection(): Collection
     {
-        return $this->coleccion;
+        return $this->collection;
     }
 
-    public function addColeccion(Coleccion $coleccion): static
+    public function addCollection(Coleccion $collection): static
     {
-        if (!$this->coleccion->contains($coleccion)) {
-            $this->coleccion->add($coleccion);
-            $coleccion->setUser($this);
+        if (!$this->collection->contains($collection)) {
+            $this->collection->add($collection);
         }
 
         return $this;
     }
 
-    public function removeColeccion(Coleccion $coleccion): static
+    public function removeCollection(Coleccion $collection): static
     {
-        if ($this->coleccion->removeElement($coleccion)) {
-            // set the owning side to null (unless already changed)
-            if ($coleccion->getUser() === $this) {
-                $coleccion->setUser(null);
-            }
-        }
+        $this->collection->removeElement($collection);
 
         return $this;
     }
+
+
+
 }
