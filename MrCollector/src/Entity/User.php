@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
- #[ApiResource]
+ #[ApiResource ]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -34,10 +34,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Coleccion::class, inversedBy: 'users')]
     private Collection $collection;
 
+    #[ORM\OneToMany(targetEntity: Compra::class, mappedBy: 'user')]
+    private Collection $compra;
+
 
     public function __construct()
     {
         $this->collection = new ArrayCollection();
+        $this->compra = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,6 +134,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeCollection(Coleccion $collection): static
     {
         $this->collection->removeElement($collection);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Compra>
+     */
+    public function getCompra(): Collection
+    {
+        return $this->compra;
+    }
+
+    public function addCompra(Compra $compra): static
+    {
+        if (!$this->compra->contains($compra)) {
+            $this->compra->add($compra);
+            $compra->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompra(Compra $compra): static
+    {
+        if ($this->compra->removeElement($compra)) {
+            // set the owning side to null (unless already changed)
+            if ($compra->getUser() === $this) {
+                $compra->setUser(null);
+            }
+        }
 
         return $this;
     }

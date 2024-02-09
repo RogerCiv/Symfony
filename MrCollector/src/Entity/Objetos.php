@@ -8,9 +8,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Serializer\Attribute\Groups as AttributeGroups;
 
 #[ORM\Entity(repositoryClass: ObjetosRepository::class)]
-#[ApiResource]
+#[ApiResource (
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['update']],
+)]
 class Objetos
 {
     #[ORM\Id]
@@ -19,31 +26,43 @@ class Objetos
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read'])]
+    #[SerializedName('name')]
     private ?string $nombre = null;
 
     #[ORM\ManyToOne(inversedBy: 'objetos')]
+    #[Groups(['read'])]
     private ?Fabricante $fabricante = null;
 
     #[ORM\ManyToOne(inversedBy: 'objetos')]
+    #[Groups(['read'])]
     private ?Oleada $oleada = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read'])]
     private ?string $foto = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    #[Groups(['read'])]
     private ?string $precio_salida = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    #[Groups(['read'])]
     private ?string $precio_estimado_actual = null;
 
     #[ORM\ManyToOne(inversedBy: 'objetos')]
+    #[Groups(['read'])]
     private ?Coleccion $nombre_coleccion = null;
+
+    #[ORM\OneToMany(targetEntity: Compra::class, mappedBy: 'objeto')]
+    #[Groups(['read'])]
+    private Collection $compras;
 
 
 
     public function __construct()
     {
-     
+        $this->compras = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,7 +74,7 @@ class Objetos
     {
         return $this->nombre;
     }
-
+    #[Groups(['update'])]
     public function setNombre(string $nombre): static
     {
         $this->nombre = $nombre;
@@ -131,6 +150,36 @@ class Objetos
     public function setNombreColeccion(?Coleccion $nombre_coleccion): static
     {
         $this->nombre_coleccion = $nombre_coleccion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Compra>
+     */
+    public function getCompras(): Collection
+    {
+        return $this->compras;
+    }
+
+    public function addCompra(Compra $compra): static
+    {
+        if (!$this->compras->contains($compra)) {
+            $this->compras->add($compra);
+            $compra->setObjeto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompra(Compra $compra): static
+    {
+        if ($this->compras->removeElement($compra)) {
+            // set the owning side to null (unless already changed)
+            if ($compra->getObjeto() === $this) {
+                $compra->setObjeto(null);
+            }
+        }
 
         return $this;
     }

@@ -7,9 +7,12 @@ use App\Repository\ColeccionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ColeccionRepository::class)]
-#[ApiResource]
+#[ApiResource (
+    normalizationContext: ['groups' => ['update']],
+)]
 class Coleccion
 {
     #[ORM\Id]
@@ -21,9 +24,11 @@ class Coleccion
     private ?string $nombre = null;
 
     #[ORM\OneToMany(targetEntity: Objetos::class, mappedBy: 'nombre_coleccion')]
+    #[Groups(['update'])]
     private Collection $objetos;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'collection')]
+    #[Groups(['update'])]
     private Collection $users;
 
 
