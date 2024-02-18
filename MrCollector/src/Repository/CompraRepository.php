@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Compra;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,6 +21,21 @@ class CompraRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Compra::class);
     }
+
+    // En tu CompraRepository.php
+public function findComprasByUser(User $user)
+{
+    return $this->createQueryBuilder('c')
+        ->join('c.user', 'u')
+        ->join('c.objeto', 'o')
+        ->join('o.fabricante', 'f')
+        ->join('o.oleada', 'ol')
+        ->where('u.id = :userId')
+        ->setParameter('userId', $user->getId())
+        ->getQuery()
+        ->getResult();
+}
+
 
 //    /**
 //     * @return Compra[] Returns an array of Compra objects

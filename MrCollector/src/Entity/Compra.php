@@ -18,7 +18,7 @@ class Compra
     #[ORM\Column]
     private ?int $precio = null;
 
-    #[ORM\ManyToOne(inversedBy: 'precio_compra')]
+    #[ORM\ManyToOne(inversedBy: 'compra')]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'compras')]
